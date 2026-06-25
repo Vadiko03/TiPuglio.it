@@ -1,0 +1,6 @@
+{
+  "name": "Ristorante Ti Puglio",
+  "description": "Ti Puglio — Specialità della cucina pugliese a Roma. Menù, recensioni con Firebase, prenotazioni WhatsApp e mappa interattiva in stile Pop Art.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

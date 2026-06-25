@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bangers", cursive, sans-serif;
+  --font-comic: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  /* Pop Art Custom Theme Colors */
+  --color-pop-yellow: #FFE600;
+  --color-pop-orange: #FF5C00;
+  --color-pop-red: #FF003C;
+  --color-pop-pink: #FF007F;
+  --color-pop-cyan: #00D2FF;
+  --color-pop-purple: #9D00FF;
+  --color-pop-green: #00E676;
+  --color-pop-dark: #000000;
+  --color-pop-cream: #FFFDF0;
+}
+
+@layer utilities {
+  /* Bold Retro Pop Art Shadows & Outlines */
+  .pop-shadow {
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  }
+  .pop-shadow-lg {
+    box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  }
+  .pop-shadow-sm {
+    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+  }
+  .pop-border {
+    border: 3px solid #000000;
+  }
+  .pop-border-sm {
+    border: 2px solid #000000;
+  }
+}
+
+/* Custom scrollbar in Pop Art style */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #FFFDF0;
+  border-left: 3px solid #000000;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #FF003C;
+  border-radius: 0px;
+  border: 3px solid #000000;
+}

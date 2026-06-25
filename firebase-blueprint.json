@@ -1,0 +1,43 @@
+{
+  "entities": {
+    "Review": {
+      "title": "Review",
+      "description": "A customer review of the restaurant",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name or nickname of the reviewer"
+        },
+        "rating": {
+          "type": "integer",
+          "description": "Rating score between 1 and 5"
+        },
+        "text": {
+          "type": "string",
+          "description": "Text content of the review"
+        },
+        "meta": {
+          "type": "string",
+          "description": "Optional tag describing the user e.g. Local Guide"
+        },
+        "date": {
+          "type": "string",
+          "description": "Relative date string or Oggi"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of creation"
+        }
+      },
+      "required": ["name", "rating", "text", "meta", "date", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Collection of customer reviews"
+    }
+  }
+}
