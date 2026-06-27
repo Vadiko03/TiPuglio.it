@@ -28,6 +28,7 @@ export const RESTAURANT_MENU: MenuCategory[] = [
       { name: "Uccelletti Pugliesi", price: "€ 5", allergens: [7, 12] },
       { name: "Tartare di Manzo con Stracciatella e Primitivo", price: "€ 13" },
       { name: "Cialledda con Burrata", price: "€ 8" },
+      { name: "Cialledda con baccalà", price: "€ 14" },
       { name: "Pane", price: "€ 1,50", allergens: [1] }
     ]
   },
