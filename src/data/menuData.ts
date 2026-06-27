@@ -104,7 +104,6 @@ export const RESTAURANT_MENU: MenuCategory[] = [
       { name: "Sporcamuss con Amarene", price: "€ 7", allergens: [1, 7] },
       { name: "Tetta della Monaca", price: "€ 7", allergens: [1, 3, 7], tags: ["*"] },
       { name: "Crostata di Mele e Crema Diplomatica", price: "€ 7", allergens: [1, 3, 7], tags: ["*"] },
-      { name: "Fragole con Panna", price: "€ 6", allergens: [7] },
       { name: "Cocomero", price: "€ 5" }
     ]
   },
