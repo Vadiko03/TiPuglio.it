@@ -25,7 +25,7 @@ export const RESTAURANT_MENU: MenuCategory[] = [
       { name: "Tagliere Maialino Nero", price: "€ 20", allergens: [12] },
       { name: "Focaccia Barese", price: "€ 16", allergens: [1], tags: ["*"] },
       { name: "Polpette di Pane, Menta e Limone", price: "€ 4", allergens: [1, 3, 7] },
-      { name: "Uccelletti Pugliesi", price: "€ 5", allergens: [7, 12], tags: ["ND"] },
+      { name: "Uccelletti Pugliesi", price: "€ 5", allergens: [7, 12] },
       { name: "Tartare di Manzo con Stracciatella e Primitivo", price: "€ 13" },
       { name: "Cialledda con Burrata", price: "€ 8" },
       { name: "Pane", price: "€ 1,50", allergens: [1] }
