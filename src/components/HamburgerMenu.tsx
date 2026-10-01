@@ -15,7 +15,6 @@ export default function HamburgerMenu({ isOpen, onToggle, currentSection, onNavi
     { id: "menu", label: "Menù & Aperitivo", color: "bg-pop-yellow" },
     { id: "recensioni", label: "Recensioni Ospiti", color: "bg-pop-pink" },
     { id: "dove-siamo", label: "Dove Siamo", color: "bg-pop-cyan" },
-    { id: "contatti", label: "Prenota Tavolo", color: "bg-pop-orange" },
   ];
 
   return (
