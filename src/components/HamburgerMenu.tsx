@@ -70,30 +70,45 @@ export default function HamburgerMenu({ isOpen, onToggle, currentSection, onNavi
                 </div>
               </div>
 
-              {/* Navigation list */}
-              <nav className="flex flex-col gap-4 mb-8">
-                {menuItems.map((item) => {
-                  const isActive = currentSection === item.id;
-                  return (
-                    <motion.button
-                      key={item.id}
-                      whileHover={{ scale: 1.05, x: 10, rotate: -1 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => {
-                        onNavigate(item.id);
-                        onToggle();
-                      }}
-                      className={`w-full text-left font-display text-2xl tracking-wide uppercase px-5 py-3 border-4 border-black pop-shadow cursor-pointer transition-all ${
-                        isActive 
-                          ? `${item.color} text-black translate-x-2` 
-                          : "bg-white hover:bg-pop-cyan text-black"
-                      }`}
-                    >
-                      {item.label}
-                    </motion.button>
-                  );
-                })}
-              </nav>
+{/* Navigation list */}
+<nav className="flex flex-col gap-4 mb-8">
+  {menuItems.map((item) => {
+    const isActive = currentSection === item.id;
+    return (
+      <motion.button
+        key={item.id}
+        whileHover={{ scale: 1.05, x: 10, rotate: -1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => {
+          onNavigate(item.id);
+          onToggle();
+        }}
+        className={`w-full text-left font-display text-2xl tracking-wide uppercase px-5 py-3 border-4 border-black pop-shadow cursor-pointer transition-all ${
+          isActive 
+            ? `${item.color} text-black translate-x-2` 
+            : "bg-white hover:bg-pop-cyan text-black"
+        }`}
+      >
+        {item.label}
+      </motion.button>
+    );
+  })}
+
+  {/* Bottone Prenota Online */}
+  <motion.a
+    whileHover={{ scale: 1.05, x: 10, rotate: -1 }}
+    whileTap={{ scale: 0.95 }}
+    href="https://tipuglio-fidelity.vercel.app/?view=prenota"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="w-full text-left font-display text-2xl tracking-wide uppercase px-5 py-3 border-4 border-black pop-shadow cursor-pointer transition-all bg-pop-red text-white hover:bg-pop-orange flex items-center justify-between"
+  >
+    <span>Prenota Online</span>
+    <span className="text-xs bg-white text-black px-2 py-0.5 font-comic font-black border-2 border-black rotate-2">
+      NUOVO!
+    </span>
+  </motion.a>
+</nav>
 
               {/* Orari (Opening Hours) Block in Pop Art Card */}
               <div className="bg-white border-4 border-black pop-shadow p-4 mb-8 rotate-[1deg] relative">
