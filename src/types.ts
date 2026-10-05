@@ -1,9 +1,12 @@
 export interface MenuItem {
+  id?: string;
   name: string;
   price: string; // e.g. "€ 11" or "€ 5 | € 10"
   allergens?: number[]; // list of allergen ids
   tags?: string[]; // e.g. ["🌶️", "*", "ND"]
   description?: string;
+  categoryId?: string;
+  isCustom?: boolean;
 }
 
 export interface MenuCategory {
