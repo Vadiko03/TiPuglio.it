@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, Timestamp, serverTimestamp, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, getDoc, setDoc, onSnapshot, query, orderBy, limit, Timestamp, serverTimestamp, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import firebaseConfig from "../../firebase-applet-config.json";
 
@@ -12,7 +12,7 @@ const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 // Initialize Auth (for error reporting)
 const auth = getAuth(app);
 
-export { db, collection, addDoc, getDocs, query, orderBy, limit, Timestamp, serverTimestamp, doc, updateDoc, deleteDoc };
+export { db, collection, addDoc, getDocs, getDoc, setDoc, onSnapshot, query, orderBy, limit, Timestamp, serverTimestamp, doc, updateDoc, deleteDoc };
 
 export interface Review {
   id?: string;
@@ -250,6 +250,234 @@ export async function deleteReview(id: string): Promise<boolean> {
       handleFirestoreError(error, OperationType.DELETE, path);
     } catch (loggedError) {
       console.error("Logged error during delete: ", loggedError);
+    }
+    return false;
+  }
+}
+
+// -------------------------------------------------------------
+// DYNAMIC MENU PRICE OVERRIDES (Proprietario / Gestione Prezzi)
+// -------------------------------------------------------------
+
+import { MenuItem } from "../types";
+
+export interface MenuCustomization {
+  prices: Record<string, string>;
+  hiddenItems: string[];
+  customItems: MenuItem[];
+}
+
+export async function fetchMenuData(): Promise<MenuCustomization> {
+  const path = "menu_overrides/prices";
+  try {
+    const docRef = doc(db, "menu_overrides", "prices");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return {
+        prices: (data.prices as Record<string, string>) || {},
+        hiddenItems: (data.hiddenItems as string[]) || [],
+        customItems: (data.customItems as MenuItem[]) || [],
+      };
+    }
+    return { prices: {}, hiddenItems: [], customItems: [] };
+  } catch (error) {
+    console.error("Error fetching menu data from Firestore:", error);
+    try {
+      handleFirestoreError(error, OperationType.GET, path);
+    } catch (loggedError) {
+      console.error("Logged error during fetchMenuData:", loggedError);
+    }
+    return { prices: {}, hiddenItems: [], customItems: [] };
+  }
+}
+
+export function subscribeMenuData(callback: (data: MenuCustomization) => void): () => void {
+  const path = "menu_overrides/prices";
+  const docRef = doc(db, "menu_overrides", "prices");
+  return onSnapshot(
+    docRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data();
+        callback({
+          prices: (data.prices as Record<string, string>) || {},
+          hiddenItems: (data.hiddenItems as string[]) || [],
+          customItems: (data.customItems as MenuItem[]) || [],
+        });
+      } else {
+        callback({ prices: {}, hiddenItems: [], customItems: [] });
+      }
+    },
+    (error) => {
+      console.error("Error subscribing to menu data:", error);
+      try {
+        handleFirestoreError(error, OperationType.GET, path);
+      } catch (loggedError) {
+        console.error("Logged error in subscribeMenuData:", loggedError);
+      }
+    }
+  );
+}
+
+export async function toggleHideDish(dishName: string, hide: boolean): Promise<boolean> {
+  const path = "menu_overrides/prices";
+  try {
+    const docRef = doc(db, "menu_overrides", "prices");
+    const docSnap = await getDoc(docRef);
+    let hiddenItems: string[] = [];
+    if (docSnap.exists()) {
+      hiddenItems = (docSnap.data().hiddenItems as string[]) || [];
+    }
+    if (hide) {
+      if (!hiddenItems.includes(dishName)) {
+        hiddenItems.push(dishName);
+      }
+    } else {
+      hiddenItems = hiddenItems.filter((name) => name !== dishName);
+    }
+    await setDoc(
+      docRef,
+      {
+        hiddenItems,
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (error) {
+    console.error("Error toggling hide dish:", error);
+    try {
+      handleFirestoreError(error, OperationType.WRITE, path);
+    } catch (loggedError) {
+      console.error("Logged error in toggleHideDish:", loggedError);
+    }
+    return false;
+  }
+}
+
+export async function addCustomDish(item: MenuItem): Promise<boolean> {
+  const path = "menu_overrides/prices";
+  try {
+    const docRef = doc(db, "menu_overrides", "prices");
+    const docSnap = await getDoc(docRef);
+    let customItems: MenuItem[] = [];
+    if (docSnap.exists()) {
+      customItems = (docSnap.data().customItems as MenuItem[]) || [];
+    }
+    // Remove if already exists with same name, then add
+    customItems = customItems.filter((i) => i.name.toLowerCase() !== item.name.toLowerCase());
+    customItems.push({
+      ...item,
+      id: item.id || `custom_${Date.now()}`,
+      isCustom: true,
+    });
+    await setDoc(
+      docRef,
+      {
+        customItems,
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (error) {
+    console.error("Error adding custom dish:", error);
+    try {
+      handleFirestoreError(error, OperationType.WRITE, path);
+    } catch (loggedError) {
+      console.error("Logged error in addCustomDish:", loggedError);
+    }
+    return false;
+  }
+}
+
+export async function deleteCustomDish(dishName: string): Promise<boolean> {
+  const path = "menu_overrides/prices";
+  try {
+    const docRef = doc(db, "menu_overrides", "prices");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      let customItems = (docSnap.data().customItems as MenuItem[]) || [];
+      customItems = customItems.filter((i) => i.name !== dishName);
+      await setDoc(
+        docRef,
+        {
+          customItems,
+          updatedAt: serverTimestamp(),
+        },
+        { merge: true }
+      );
+    }
+    return true;
+  } catch (error) {
+    console.error("Error deleting custom dish:", error);
+    try {
+      handleFirestoreError(error, OperationType.WRITE, path);
+    } catch (loggedError) {
+      console.error("Logged error in deleteCustomDish:", loggedError);
+    }
+    return false;
+  }
+}
+
+export async function updateMenuPrice(itemName: string, newPrice: string): Promise<boolean> {
+  const path = "menu_overrides/prices";
+  try {
+    const docRef = doc(db, "menu_overrides", "prices");
+    const docSnap = await getDoc(docRef);
+    let currentPrices: Record<string, string> = {};
+    if (docSnap.exists()) {
+      currentPrices = (docSnap.data().prices as Record<string, string>) || {};
+    }
+    const updatedPrices = {
+      ...currentPrices,
+      [itemName]: newPrice.trim(),
+    };
+    await setDoc(
+      docRef,
+      {
+        prices: updatedPrices,
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (error) {
+    console.error("Error updating menu price:", error);
+    try {
+      handleFirestoreError(error, OperationType.WRITE, path);
+    } catch (loggedError) {
+      console.error("Logged error in updateMenuPrice:", loggedError);
+    }
+    return false;
+  }
+}
+
+export async function resetMenuPrice(itemName: string): Promise<boolean> {
+  const path = "menu_overrides/prices";
+  try {
+    const docRef = doc(db, "menu_overrides", "prices");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const currentPrices = { ...((docSnap.data().prices as Record<string, string>) || {}) };
+      delete currentPrices[itemName];
+      await setDoc(
+        docRef,
+        {
+          prices: currentPrices,
+          updatedAt: serverTimestamp(),
+        },
+        { merge: true }
+      );
+    }
+    return true;
+  } catch (error) {
+    console.error("Error resetting menu price:", error);
+    try {
+      handleFirestoreError(error, OperationType.WRITE, path);
+    } catch (loggedError) {
+      console.error("Logged error in resetMenuPrice:", loggedError);
     }
     return false;
   }
