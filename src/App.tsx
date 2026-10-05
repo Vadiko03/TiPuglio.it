@@ -73,16 +73,16 @@ export default function App() {
               </motion.div>
 
               {/* Right CTA for Booking System */}
-<motion.a
-  whileHover={{ scale: 1.05, rotate: 1 }}
-  whileTap={{ scale: 0.95 }}
-  href="https://tipuglio-fidelity.vercel.app/?view=prenota"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="bg-pop-red text-white font-display text-sm tracking-wide uppercase px-4 py-2 border-3 border-black pop-shadow-sm cursor-pointer hover:bg-pop-orange transition-colors inline-block"
->
-  Prenota Tavolo!
-</motion.a>
+              <motion.a
+                whileHover={{ scale: 1.05, rotate: 1 }}
+                whileTap={{ scale: 0.95 }}
+                href="https://tipuglio-fidelity.vercel.app/?view=prenota"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-pop-red text-white font-display text-sm tracking-wide uppercase px-4 py-2 border-3 border-black pop-shadow-sm cursor-pointer hover:bg-pop-orange transition-colors inline-block"
+              >
+                Prenota Tavolo!
+              </motion.a>
             </header>
 
             {/* Left Drawer Hamburguer Menu */}
