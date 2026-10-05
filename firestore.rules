@@ -10,5 +10,10 @@ service cloud.firestore {
     match /reviews/{reviewId} {
       allow read, write: if true;
     }
+
+    // Dynamic Menu Overrides rules
+    match /menu_overrides/{documentId} {
+      allow read, write: if true;
+    }
   }
 }
