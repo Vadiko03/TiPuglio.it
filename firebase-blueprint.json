@@ -32,12 +32,43 @@
         }
       },
       "required": ["name", "rating", "text", "meta", "date", "createdAt"]
+    },
+    "MenuOverride": {
+      "title": "MenuOverride",
+      "description": "Custom prices, hidden dishes, and newly added items managed dynamically by the owner",
+      "type": "object",
+      "properties": {
+        "prices": {
+          "type": "object",
+          "description": "Dictionary mapping dish names to updated price strings"
+        },
+        "hiddenItems": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of dish names hidden or taken off menu by the owner"
+        },
+        "customItems": {
+          "type": "array",
+          "items": { "type": "object" },
+          "description": "List of custom dishes added by the owner"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of update"
+        }
+      }
     }
   },
   "firestore": {
     "/reviews/{reviewId}": {
       "schema": "Review",
       "description": "Collection of customer reviews"
+    },
+    "/menu_overrides/{documentId}": {
+      "schema": "MenuOverride",
+      "description": "Price customizations applied to menu items"
     }
   }
 }
+
